@@ -2,7 +2,7 @@ const Navbar = () => {
   return (
     <div className="bg-black text-white p-3">
       <div className="flex justify-between items-center">
-        <span className="text-2xl font-bold cursor-pointer">BookStore</span>  
+        <span className="text-2xl font-bold cursor-pointer">BookStore</span>
         <div className="w-full">
           <form className="max-w-md mx-auto">
             <label
@@ -45,7 +45,9 @@ const Navbar = () => {
             </div>
           </form>
         </div>
+
         <div className="flex items-center justify-center">
+          <div className="mr-5 w-24 cursor-pointer bg-blue-600 rounded border items-center justify-center align-middle p-2 flex">Add Book</div>
           <span className="bg-pink-600 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
             H
           </span>

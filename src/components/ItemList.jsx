@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getBooks } from "../redux/bookSlice";
 import TablePagination from "@mui/material/TablePagination";
+import EditModal from './EditModal';
 
 const ItemList = () => {
   const [page, setPage] = useState(2);
@@ -20,6 +21,7 @@ const ItemList = () => {
 
   const dispatch = useDispatch();
   const { entities, loading, error } = useSelector((state) => state.bookSlice);
+  const showModal = useSelector((state) => state.bookSlice.showModal);
 
   useEffect(() => {
     dispatch(getBooks());
@@ -38,6 +40,7 @@ const ItemList = () => {
   //     console.log("entities Length",entities.length);
   //   }
   if (loading === "succeeded") {
+    console.log("entities itemlist içinde",entities);
     return (
       <>
         <div className="p-3 grid grid-cols-3">
@@ -59,6 +62,7 @@ const ItemList = () => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </div>
+        {showModal && <EditModal />}
       </>
     );
   }

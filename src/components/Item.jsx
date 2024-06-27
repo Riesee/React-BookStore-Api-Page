@@ -8,14 +8,34 @@ import {
 } from "@material-tailwind/react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import "./boxShadow.css";
-
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBook, setBooks, setModal } from "../redux/bookSlice";
+  
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Item({ book }) {
-  const handleDelete = () => {
-    console.log("dasd");
+  const dispatch = useDispatch();
+  // const allBooks = useSelector((state) => state.bookSlice.entities);
+
+  const handleDelete = (id) => {
+    // const newBooks = allBooks.filter((e) => e.id !== book.id);
+    // dispatch(setBooks(newBooks));
+    dispatch(deleteBook({ id }))
+      .unwrap() // unwrap ile async thunk'ın döndüğü promise'den çıkıyoruz
+      .then(() => {
+        console.log("Book deleted successfully!");
+        // Gerekirse silme işleminden sonra yapılacak işlemler buraya yazılabilir
+      })
+      .catch((error) => {
+        console.error("Failed to delete the book: ", error);
+        // Silme işlemi başarısız olduğunda yapılacak işlemler buraya yazılabilir
+      });
+  };  
+
+  const handleEdit = () => {
+    dispatch(setModal({ showModal: true, book }));  
   };
 
   return (
@@ -35,6 +55,7 @@ export default function Item({ book }) {
                 <MenuItem>
                   {({ focus }) => (
                     <a
+                      onClick={handleEdit}
                       href="#"
                       className={classNames(
                         focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
@@ -45,81 +66,12 @@ export default function Item({ book }) {
                     </a>
                   )}
                 </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Duplicate
-                    </a>
-                  )}
-                </MenuItem>
               </div>
               <div className="py-1">
                 <MenuItem>
                   {({ focus }) => (
                     <a
-                      href="#"
-                      className={classNames(
-                        focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Archive
-                    </a>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Move
-                    </a>
-                  )}
-                </MenuItem>
-              </div>
-              <div className="py-1">
-                <MenuItem>
-                  {({ focus }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Share
-                    </a>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Add to favorites
-                    </a>
-                  )}
-                </MenuItem>
-              </div>
-              <div className="py-1">
-                <MenuItem>
-                  {({ focus }) => (
-                    <a
-                      onClick={handleDelete}
+                      onClick={() => handleDelete(book.id)}
                       href="#"
                       className={classNames(
                         focus ? "bg-gray-100 text-gray-900" : "text-gray-700",
@@ -137,7 +89,7 @@ export default function Item({ book }) {
         <div className="flex items-center align-middle justify-center">
           <img
             className="cursor-pointer max-h-80"
-            src={book.cover_image}
+            src={book.image}
             alt="card-image"
           />
         </div>
@@ -148,7 +100,7 @@ export default function Item({ book }) {
           color="blue-gray"
           className="mb-2 text-black font-semibold"
         >
-          {book.title}
+          {book.name}
         </Typography>
         <Typography>{book.description}</Typography>
       </CardBody>
