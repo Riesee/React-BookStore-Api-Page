@@ -1,23 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { CloudUpload } from "@mui/icons-material";
 
-
-
-const AddBook = () => {
-
-    const dispatch = useDispatch();
-
-
-    const addBookModal = useSelector((state) => state.bookSlice.addBookModal);
+const AddBook = ({ addBookModall, setAllBookModall }) => {
 
     const closeModal = () => {
-        dispatch(setAddBookModal({ showModal: false }));
-      };
-    
-    
+    addBookModall = false;
+    setAllBookModall(false);
+  };
+
   return (
     <>
       {console.log("girdi içerde")}
-      {addBookModal && (
+      {addBookModall && (
         <>
           <div className=" w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -25,9 +19,7 @@ const AddBook = () => {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Add Book
-                  </h3>
+                  <h3 className="text-3xl font-semibold">Add Book</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
@@ -53,7 +45,7 @@ const AddBook = () => {
                           aria-describedby="user_avatar_help"
                           id="user_avatar"
                           type="file"
-                          onChange={handleImageChange}
+                          //   onChange={handleImageChange}
                         />
                       </div>
                       <div className="relative z-0 w-full mb-5 group">
@@ -63,8 +55,8 @@ const AddBook = () => {
                           id="floating_name"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                          value={bookName}
-                          onChange={(e) => setBookName(e.target.value)}
+                          //   value={bookName}
+                          //   onChange={(e) => setBookName(e.target.value)}
                           required
                         />
                         <label
@@ -81,8 +73,8 @@ const AddBook = () => {
                           id="floating_password"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                          value={author}
-                          onChange={(e) => setAuthor(e.target.value)}
+                          //   value={author}
+                          //   onChange={(e) => setAuthor(e.target.value)}
                           required
                         />
                         <label
@@ -104,8 +96,8 @@ const AddBook = () => {
                           rows="4"
                           className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-black focus:border-black"
                           placeholder="Write a description"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
+                          //   value={description}
+                          //   onChange={(e) => setDescription(e.target.value)}
                         ></textarea>
                       </div>
                       <div className="grid md:grid-cols-2 md:gap-6">
@@ -116,8 +108,8 @@ const AddBook = () => {
                             id="floating_first_name"
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-black peer"
                             placeholder=" "
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            // value={price}
+                            // onChange={(e) => setPrice(e.target.value)}
                             required
                           />
                           <label
@@ -134,8 +126,8 @@ const AddBook = () => {
                             id="floating_last_name"
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                             placeholder=" "
-                            value={publicationType}
-                            onChange={(e) => setPublicationType(e.target.value)}
+                            // value={publicationType}
+                            // onChange={(e) => setPublicationType(e.target.value)}
                             required
                           />
                           <label
@@ -161,7 +153,7 @@ const AddBook = () => {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={handlerSaveChange}
+                    // onClick={handlerSaveChange}
                   >
                     Save Changes
                   </button>

@@ -1,4 +1,13 @@
+import { useState } from "react";
+import AddBook from "./AddBook";
+
 const Navbar = () => {
+  const [addBookModall, setAllBookModall] = useState(false);
+
+  const addBookHandler = () => {
+    setAllBookModall(true);
+  };
+
   return (
     <div className="bg-black text-white p-3">
       <div className="flex justify-between items-center">
@@ -47,13 +56,19 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center justify-center">
-          <div className="mr-5 w-24 cursor-pointer bg-blue-600 rounded border items-center justify-center align-middle p-2 flex">Add Book</div>
+          <div
+            className="mr-5 w-24 cursor-pointer bg-blue-600 rounded border items-center justify-center align-middle p-2 flex"
+            onClick={addBookHandler}
+          >
+            Add Book
+          </div>
           <span className="bg-pink-600 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
             H
           </span>
           <span className="mx-1 cursor-pointer">Hilmi</span>
         </div>
       </div>
+      <AddBook addBookModall={addBookModall} setAllBookModall={setAllBookModall} />
     </div>
   );
 };

@@ -77,15 +77,11 @@ export const bookSlice = createSlice({
     error: false,
     showModal: false,
     currentBook: null, // Şu an düzenlenen kitabı tutmak için
-    addBookModal: false,
   },
   reducers: {
     setModal: (state, action) => {
       state.showModal = action.payload.showModal;
       state.currentBook = action.payload.book || null;
-    },
-    setAddBookModal: (state, action) => {
-      state.addBookModal = action.payload.addBookModal;
     },
     setBooks: (state, action) => {
       state.entities = action.payload;
