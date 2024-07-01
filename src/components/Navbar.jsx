@@ -1,17 +1,47 @@
 import { useState } from "react";
 import AddBook from "./AddBook";
+import Register from "./Register";
+import Login from "./Login";
+import { useDispatch, useSelector } from "react-redux";
+import { changeLoggedIn, changeLoginRegister } from "../redux/bookSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const isLogin = useSelector((state) => state.bookSlice.isLoggedIn);
+
+  const loginRegister = useSelector((state) => state.bookSlice.loginRegister);
+
+  const [login, setLogin] = useState(false);
+
   const [addBookModall, setAllBookModall] = useState(false);
+
+  console.log(loginRegister, "componentnavbar içinde");
+
 
   const addBookHandler = () => {
     setAllBookModall(true);
   };
 
+  const registerHandler = () => {
+    dispatch(changeLoginRegister("register"));
+  };
+
+  const loginHandler = () => {
+    dispatch(changeLoginRegister("login"));
+  };
+
+  const silecem = () => {
+    dispatch(changeLoggedIn(!login));
+    setLogin(!login);
+  };
+
   return (
     <div className="bg-black text-white p-3">
       <div className="flex justify-between items-center">
-        <span className="text-2xl font-bold cursor-pointer">BookStore</span>
+        <span className="text-2xl font-bold cursor-pointer" onClick={silecem}>
+          BookStore
+        </span>
         <div className="w-full">
           <form className="max-w-md mx-auto">
             <label
@@ -57,18 +87,46 @@ const Navbar = () => {
 
         <div className="flex items-center justify-center">
           <div
-            className="mr-5 w-24 cursor-pointer bg-blue-600 rounded border items-center justify-center align-middle p-2 flex"
+            className="mr-5 w-24 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
             onClick={addBookHandler}
           >
             Add Book
           </div>
-          <span className="bg-pink-600 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
-            H
-          </span>
-          <span className="mx-1 cursor-pointer">Hilmi</span>
+          {isLogin ? (
+            <>
+              <span className="bg-pink-600 rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
+                H
+              </span>
+              <span className="mx-1 cursor-pointer">Hilmi</span>
+            </>
+          ) : (
+            <>
+              <div
+                className="mr-2 w-20 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
+                onClick={registerHandler}
+              >
+                Register
+              </div>
+              <div
+                className="mr-5 w-20 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
+                onClick={loginHandler}
+              >
+                Login
+              </div>
+            </>
+          )}
         </div>
       </div>
-      <AddBook addBookModall={addBookModall} setAllBookModall={setAllBookModall} />
+      <div className="w-96 h-full">
+        <AddBook
+          addBookModall={addBookModall}
+          setAllBookModall={setAllBookModall}
+          addBookk={true}
+        />
+
+        {loginRegister === "register" && <Register />}
+        {loginRegister === "login" && <Login />}
+      </div>
     </div>
   );
 };

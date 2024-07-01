@@ -57,6 +57,29 @@ export const putBooks = createAsyncThunk(
   }
 );
 
+export const postBooks = createAsyncThunk(
+  "books/postBook",
+  async ({ newBook }, thunkAPI) => {
+    try {
+      const res = await axios.post(`http://localhost:3000/books/`, {
+        name: newBook.name,
+        author: newBook.author,
+        year: newBook.year,
+        pageNumber: newBook.pageNumber,
+        publicationType: newBook.publicationType,
+        price: newBook.price,
+        category: newBook.category,
+        description: newBook.description,
+        id: newBook.id,
+        image: newBook.image,
+      });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteBook = createAsyncThunk(
   "books/deleteBook",
   async ({ id }, thunkAPI) => {
@@ -69,6 +92,19 @@ export const deleteBook = createAsyncThunk(
   }
 );
 
+export const getTheBook = createAsyncThunk(
+  "books/getTheBook",
+  async ( id , thunkAPI) => {
+    try {
+      const res = await axios.get(`http://localhost:3000/books/${id}`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+
 export const bookSlice = createSlice({
   name: "book",
   initialState: {
@@ -77,8 +113,19 @@ export const bookSlice = createSlice({
     error: false,
     showModal: false,
     currentBook: null, // Şu an düzenlenen kitabı tutmak için
+    isLoggedIn: false,
+    loginRegister: "idle",
   },
   reducers: {
+    changeLoginRegister: (state, action) => {
+      state.loginRegister = action.payload; // idle login register
+    },
+    changeLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
+    },
+    changeCurrentBook: (state, action) => {
+      state.currentBook = action.payload;
+    },
     setModal: (state, action) => {
       state.showModal = action.payload.showModal;
       state.currentBook = action.payload.book || null;
@@ -102,7 +149,7 @@ export const bookSlice = createSlice({
       .addCase(getBooks.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.error = false;
-        state.entities = action.payload;
+        state.entities = action.payload.reverse();
       })
       .addCase(getBooks.rejected, (state) => {
         state.loading = "failed";
@@ -144,10 +191,37 @@ export const bookSlice = createSlice({
       .addCase(deleteBook.rejected, (state) => {
         state.loading = "failed";
         state.error = true;
-      });
+      })
+      .addCase(postBooks.pending, (state) => {
+        state.loading = "pending";
+        state.error = false;
+      })
+      .addCase(postBooks.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.error = false;
+        // Kitap Ekle
+        state.entities.unshift(action.payload);
+      })
+      .addCase(postBooks.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getTheBook.pending, (state) => {
+        state.loading = "pending";
+        state.error = false;
+      })
+      .addCase(getTheBook.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.error = false;
+        state.currentBook = action.payload;
+      })
+      .addCase(getTheBook.rejected, (state) => {
+        state.loading = "failed";
+        state.error = true;
+      })
   },
 });
 
-export const { setBooks, setLoading, setError, setModal } = bookSlice.actions;
+export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister } = bookSlice.actions;
 
 export default bookSlice.reducer;

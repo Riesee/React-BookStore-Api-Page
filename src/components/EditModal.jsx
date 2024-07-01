@@ -13,7 +13,7 @@ const EditModal = () => {
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
   const [publicationType, setPublicationType] = useState("");
-  const [image, setImage] = useState(currentBook.image);
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     if (currentBook) {
@@ -81,14 +81,14 @@ const EditModal = () => {
                   <h3 className="text-3xl font-semibold">
                     Editing {currentBook.name}
                   </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  {/* <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    <span className="bg-transparent text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
                       X
                     </span>
-                  </button>
+                  </button> */}
                 </div>
                 {/*body*/}
                 <div className="w-full h-100 relative p-6 flex-auto">
