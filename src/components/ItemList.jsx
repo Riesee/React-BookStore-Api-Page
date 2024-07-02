@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getBooks } from "../redux/bookSlice";
 import TablePagination from "@mui/material/TablePagination";
 import EditModal from "./EditModal";
-import { Link } from "react-router-dom";
 
 const ItemList = () => {
   const [page, setPage] = useState(0);

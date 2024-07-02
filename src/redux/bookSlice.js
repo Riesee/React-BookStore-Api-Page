@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import db from "../../server/db.json"; // JSON Server veri tabanı
+
 
 export const getBooks = createAsyncThunk("books/getAll", async () => {
   //   const res = await axios.get("https://api.itbook.store/1.0/search/mongodb");
@@ -105,6 +107,58 @@ export const getTheBook = createAsyncThunk(
 );
 
 
+// //////////////////////////////////////////////// login
+export const getAccounts = createAsyncThunk("accounts/getAll", async () => {
+
+  try {
+    const res = await axios.get("http://localhost:3000/accounts");
+    return res.data;
+  } catch (error) {
+    throw Error("Failed to fetch accounts");
+  }
+});
+
+export const postAccount = createAsyncThunk(
+  "accounts/postAccount",
+  async ({ newAccount }, thunkAPI) => {
+    try {
+      const res = await axios.post(`http://localhost:3000/accounts`, {
+        name: newAccount.name,
+        surname: newAccount.surname,
+        username: newAccount.username,
+        email: newAccount.email,
+        password: newAccount.password,
+        id: newAccount.id,
+      });
+      console.log("çalıştı");
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const findUserByEmailAndPassword = (email, password) => {
+  return db.accounts.find(
+    (account) => account.email === email && account.password === password
+  );
+};
+
+export const loginUser = ({ email, password }) => async (dispatch) => {
+
+    const user = findUserByEmailAndPassword(email, password);
+
+    if (user) {
+      // Kullanıcı doğrulandıysa başarılı döner
+      return { success: true, user };
+    } else {
+      // Kullanıcı bulunamazsa hata döner
+      throw new Error("Wrong username or password");
+    }
+  }
+
+
+
 export const bookSlice = createSlice({
   name: "book",
   initialState: {
@@ -115,6 +169,8 @@ export const bookSlice = createSlice({
     currentBook: null, // Şu an düzenlenen kitabı tutmak için
     isLoggedIn: false,
     loginRegister: "idle",
+    // login işlemleri
+    accounts: [],
   },
   reducers: {
     changeLoginRegister: (state, action) => {
@@ -215,9 +271,37 @@ export const bookSlice = createSlice({
         state.error = false;
         state.currentBook = action.payload;
       })
+      // ACCOUNTS İŞLEMLERİ
       .addCase(getTheBook.rejected, (state) => {
         state.loading = "failed";
         state.error = true;
+      })
+      .addCase(getAccounts.pending, (state) => {
+        state.loading = "pending";
+        state.error = false;
+      })
+      .addCase(getAccounts.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.error = false;
+        state.accounts = action.payload;
+      })
+      .addCase(getAccounts.rejected, (state) => {
+        state.loading = "failed";
+        state.error = true;
+      })
+      .addCase(postAccount.pending, (state) => {
+        state.loading = "pending";
+        state.error = false;
+      })
+      .addCase(postAccount.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.error = false;
+        // account Ekle
+        state.accounts.unshift(action.payload);
+      })
+      .addCase(postAccount.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.payload || action.error.message;
       })
   },
 });
@@ -225,3 +309,6 @@ export const bookSlice = createSlice({
 export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister } = bookSlice.actions;
 
 export default bookSlice.reducer;
+
+
+
