@@ -2,42 +2,58 @@ import { useState } from "react";
 import Login from "./Login";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLoginRegister } from "../redux/bookSlice";
+import { postAccount } from "../redux/loginSlice";
 
 const Register = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [rePassword, setRePassword] = useState("");
-    const [surname, setSurname] = useState("");
-    const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [surname, setSurname] = useState("");
+  const [username, setUsername] = useState("");
+
+  const dispatch = useDispatch();
+
+  const loginRegister = useSelector((state) => state.bookSlice.loginRegister);
 
 
-    const dispatch = useDispatch()
-
-
-    const loginRegister = useSelector(state => state.bookSlice.loginRegister)
-
-    console.log(loginRegister, "componentregister içinde");
-
-
-
-
-    
-    
   const closeRegisterModal = () => {
-    dispatch(changeLoginRegister("idle"))
+    dispatch(changeLoginRegister("idle"));
   };
 
-
   const handlerLogin = () => {
+    dispatch(changeLoginRegister("login"));
+  };
 
-    dispatch(changeLoginRegister("login"))
-  }
-  
-  
+  const handlerRegister = () => {
+    if (password === rePassword) {
+      // register process
+      console.log("Registering", { name, email, password, surname, username });
+
+      const newAccount = {
+        name,
+        email,
+        password,
+        surname,
+        username,
+        id: "5",
+      };
+      dispatch(postAccount({ newAccount: newAccount }))
+        .unwrap()
+        .then(() => {
+          closeRegisterModal(); // Başarıyla güncellendiğinde modalı kapatın
+        })
+        .catch((error) => {
+          console.error("Failed to update the book: ", error);
+        });
+    } else {
+      alert("Passwords do not match!");
+    }
+  };
+
   return (
     <>
-      {loginRegister==="register" && (
+      {loginRegister === "register" && (
         <>
           <div className="w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -69,12 +85,12 @@ const Register = () => {
                             id="name"
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                             placeholder=" "
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             required
                           />
                           <label
-                            htmlFor="retype-password"
+                            htmlFor="name"
                             className="peer-focus:font-medium absolute text-sm text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                           >
                             Name
@@ -83,16 +99,16 @@ const Register = () => {
                         <div className="relative z-0 w-full mb-5 group">
                           <input
                             type="text"
-                            name="name"
+                            name="surName"
                             id="surName"
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                             placeholder=" "
-                              value={surname}
-                              onChange={(e) => setSurname(e.target.value)}
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
                             required
                           />
                           <label
-                            htmlFor="retype-password"
+                            htmlFor="surName"
                             className="peer-focus:font-medium absolute text-sm text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                           >
                             Surname
@@ -106,8 +122,8 @@ const Register = () => {
                           id="username"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
                           required
                         />
                         <label
@@ -124,12 +140,12 @@ const Register = () => {
                           id="email"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                           required
                         />
                         <label
-                          htmlFor="floating_name"
+                          htmlFor="email"
                           className="peer-focus:font-medium absolute text-sm text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                         >
                           Email
@@ -142,8 +158,8 @@ const Register = () => {
                           id="password"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                           required
                         />
                         <label
@@ -156,19 +172,19 @@ const Register = () => {
                       <div className="relative z-0 w-full mb-5 group">
                         <input
                           type="password"
-                          name="retype-password"
-                          id="retype-password"
+                          name="again-password"
+                          id="again-password"
                           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                           placeholder=" "
-                            value={rePassword}
-                            onChange={(e) => setRePassword(e.target.value)}
+                          value={rePassword}
+                          onChange={(e) => setRePassword(e.target.value)}
                           required
                         />
                         <label
-                          htmlFor="retype-password"
+                          htmlFor="again-password"
                           className="peer-focus:font-medium absolute text-sm text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                         >
-                          Retype Password
+                          Again Password
                         </label>
                       </div>
                     </form>
@@ -177,10 +193,12 @@ const Register = () => {
                 {/*footer*/}
                 <div className="flex items-center justify-between align-middle p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <div className="cursor-pointer justify-start py-2 text-sm outline-none focus:outline-none mr-5 mb-1 ease-linear transition-all duration-150">
-                    <a onClick={handlerLogin} className="text-gray-600 hover:text-gray-700">
+                    <a
+                      onClick={handlerLogin}
+                      className="text-gray-600 hover:text-gray-700"
+                    >
                       Back to Login
                     </a>
-                    
                   </div>
                   <div className="flex items-center justify-end align-middle">
                     <button
@@ -193,7 +211,7 @@ const Register = () => {
                     <button
                       className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                    //   onClick={handlerRegister}
+                      onClick={handlerRegister}
                     >
                       Register
                     </button>
@@ -205,9 +223,7 @@ const Register = () => {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       )}
-      {loginRegister==="login" && (
-        <Login />
-      )}
+      {loginRegister === "login" && <Login />}
     </>
   );
 };

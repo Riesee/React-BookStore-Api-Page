@@ -11,6 +11,8 @@ export const getAccounts = createAsyncThunk("accounts/getAll", async () => {
   }
 });
 
+
+
 export const putAccount = createAsyncThunk(
   "accounts/putAccount",
   async ({ id }, thunkAPI) => {
@@ -27,7 +29,7 @@ export const postAccount = createAsyncThunk(
   "accounts/postAccount",
   async ({ newAccount }, thunkAPI) => {
     try {
-      const res = await axios.post(`http://localhost:3000/accounts/`, {
+      const res = await axios.post(`http://localhost:3000/accounts`, {
         name: newAccount.name,
         surname: newAccount.surname,
         username: newAccount.username,
@@ -35,6 +37,7 @@ export const postAccount = createAsyncThunk(
         password: newAccount.password,
         id: newAccount.id,
       });
+      console.log("çalıştı");
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -58,7 +61,7 @@ export const getTheAccount = createAsyncThunk(
   "accounts/getTheAccount",
   async ( id , thunkAPI) => {
     try {
-      const res = await axios.get(`http://localhost:3000/account/${id}`);
+      const res = await axios.get(`http://localhost:3000/accounts/${id}`);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -67,10 +70,15 @@ export const getTheAccount = createAsyncThunk(
 );
 
 
+
+
 export const loginSlice = createSlice({
   name: "accounts",
   initialState: {
-    
+    loading: "idle",
+    error: false,
+    entities: [],
+
   },
   reducers: {
    
@@ -84,7 +92,7 @@ export const loginSlice = createSlice({
       .addCase(getAccounts.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.error = false;
-        state.entities = action.payload.reverse();
+        state.entities = action.payload;
       })
       .addCase(getAccounts.rejected, (state) => {
         state.loading = "failed";
@@ -99,7 +107,7 @@ export const loginSlice = createSlice({
         state.error = false;
         // Kitap listesini güncelle
         const index = state.entities.findIndex(
-          (book) => book.id === action.payload.id
+          (account) => account.id === action.payload.id
         );
         if (index !== -1) {
           state.entities[index] = action.payload;

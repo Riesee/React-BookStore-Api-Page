@@ -31,16 +31,11 @@ const ItemList = () => {
   if (loading === "pending") {
     return <div>Loading...</div>;
   }
-  if (error === "failed") {
+  if (loading === "failed") {
     return <div>HTTP 500 Server Error!</div>;
   }
 
-  //   if (loading === "succeeded"){
-  //     console.log("entities",entities);
-  //     console.log("entities Length",entities.length);
-  //   }
   if (loading === "succeeded") {
-    console.log("entities itemlist içinde", entities);
     return (
       <>
         <div className="p-3 grid grid-cols-3 items-center align-middle">

@@ -4,11 +4,13 @@ import Register from "./Register";
 import Login from "./Login";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLoggedIn, changeLoginRegister } from "../redux/bookSlice";
+import { getAccounts } from "../redux/loginSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
 
   const isLogin = useSelector((state) => state.bookSlice.isLoggedIn);
+
 
   const loginRegister = useSelector((state) => state.bookSlice.loginRegister);
 
@@ -16,24 +18,29 @@ const Navbar = () => {
 
   const [addBookModall, setAllBookModall] = useState(false);
 
-  console.log(loginRegister, "componentnavbar içinde");
+  dispatch(getAccounts());
 
-
-  const addBookHandler = () => {
+  const addBookHandler = (e) => {
     setAllBookModall(true);
+    e.preventDefault();
+
   };
 
-  const registerHandler = () => {
+  const registerHandler = (e) => {
     dispatch(changeLoginRegister("register"));
+    e.preventDefault();
+
   };
 
-  const loginHandler = () => {
+  const loginHandler = (e) => {
     dispatch(changeLoginRegister("login"));
+    e.preventDefault();
   };
 
   const silecem = () => {
     dispatch(changeLoggedIn(!login));
     setLogin(!login);
+    dispatch(getAccounts());
   };
 
   return (
@@ -88,7 +95,7 @@ const Navbar = () => {
         <div className="flex items-center justify-center">
           <div
             className="mr-5 w-24 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
-            onClick={addBookHandler}
+            onClick={(e) => addBookHandler(e)}
           >
             Add Book
           </div>
@@ -103,13 +110,13 @@ const Navbar = () => {
             <>
               <div
                 className="mr-2 w-20 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
-                onClick={registerHandler}
+                onClick={(e) => registerHandler(e)}
               >
                 Register
               </div>
               <div
                 className="mr-5 w-20 cursor-pointer bg-blue-600 hover:bg-blue-800 rounded border items-center justify-center align-middle p-2 flex"
-                onClick={loginHandler}
+                onClick={(e) =>loginHandler(e)}
               >
                 Login
               </div>

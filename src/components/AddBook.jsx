@@ -7,7 +7,6 @@ import { postBooks, putBooks } from "../redux/bookSlice";
 const AddBook = ({ addBookModall, setAllBookModall, addBookk, book }) => {
   const dispatch = useDispatch();
   const entities = useSelector((state) => state.bookSlice.entities);
-  console.log(addBookk);
 
   const [image, setImage] = useState(addBookk ? " " : book.image);
   const [bookName, setBookName] = useState(addBookk ? " " : book.name);
@@ -101,7 +100,6 @@ const AddBook = ({ addBookModall, setAllBookModall, addBookk, book }) => {
 
   return (
     <>
-      {console.log("girdi içerde addbook")}
       {addBookModall && (
         <>
           <div className=" w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">

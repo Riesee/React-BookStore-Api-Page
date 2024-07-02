@@ -121,7 +121,7 @@ export const bookSlice = createSlice({
       state.loginRegister = action.payload; // idle login register
     },
     changeLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload;
+      state.isLoggedIn = action.payload; 
     },
     changeCurrentBook: (state, action) => {
       state.currentBook = action.payload;
