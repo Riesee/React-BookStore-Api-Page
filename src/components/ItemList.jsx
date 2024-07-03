@@ -6,7 +6,7 @@ import { getBooks } from "../redux/bookSlice";
 import TablePagination from "@mui/material/TablePagination";
 import EditModal from "./EditModal";
 
-const ItemList = () => {
+const ItemList = ({ filteredEntities, setFilteredEntities }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(9);
 
@@ -20,12 +20,17 @@ const ItemList = () => {
   };
 
   const dispatch = useDispatch();
-  const { entities, loading, error } = useSelector((state) => state.bookSlice);
   const showModal = useSelector((state) => state.bookSlice.showModal);
+  const { entities, loading } = useSelector((state) => state.bookSlice);
 
   useEffect(() => {
-    dispatch(getBooks());
-  }, [dispatch]);
+    if (loading === "idle") {
+      dispatch(getBooks());
+    }
+    if (loading === "succeeded") {
+      setFilteredEntities(entities);
+    }
+  }, [dispatch, loading, entities, setFilteredEntities]);
 
   if (loading === "pending") {
     return <div>Loading...</div>;
@@ -38,7 +43,11 @@ const ItemList = () => {
     return (
       <>
         <div className="p-3 grid grid-cols-3 items-center align-middle">
-          {entities
+          {filteredEntities.length === 0 && (
+            <div className="text-center">No books found.</div>
+          )}
+
+          {filteredEntities
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((book, index) => (
               <Item key={index} book={book} />
@@ -49,7 +58,7 @@ const ItemList = () => {
             rowsPerPageOptions={[3, 6, 9, 12, 15, { label: "All", value: -1 }]}
             className="items-center justify-center align-middle flex text-black"
             component="div"
-            count={entities.length}
+            count={filteredEntities.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
@@ -60,6 +69,8 @@ const ItemList = () => {
       </>
     );
   }
+
+  return null;
 };
 
 export default ItemList;

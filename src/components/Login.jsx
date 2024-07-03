@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { changeLoggedIn, loginUser } from "../redux/bookSlice";
 
 const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("");
 
@@ -24,7 +24,7 @@ const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
   const handlerLogin = async (e) => {
     e.preventDefault();
     try {
-      const { success, user } = await dispatch(loginUser({ email, password }));
+      const { success, user } = await dispatch(loginUser({ username, password }));
 
       if (success) {
         console.log("User logged in:", user);
@@ -44,7 +44,7 @@ const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
   if (loginmi === true) {
     return (
       <>
-        <div className=" w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+        <div className="  w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto  fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative w-auto my-6 mx-auto max-w-3xl">
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -71,15 +71,15 @@ const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
                         id="floating_name"
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
                         placeholder=" "
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                       />
                       <label
                         htmlFor="floating_name"
                         className="peer-focus:font-medium absolute text-sm text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                       >
-                        Email
+                        Username
                       </label>
                     </div>
                     <div className="relative z-0 w-full mb-5 group">

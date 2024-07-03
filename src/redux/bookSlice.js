@@ -144,9 +144,9 @@ const findUserByEmailAndPassword = (email, password) => {
   );
 };
 
-export const loginUser = ({ email, password }) => async (dispatch) => {
+export const loginUser = ({ username, password }) => async (dispatch) => {
 
-    const user = findUserByEmailAndPassword(email, password);
+    const user = findUserByEmailAndPassword(username, password);
 
     if (user) {
       // Kullanıcı doğrulandıysa başarılı döner
@@ -164,15 +164,19 @@ export const bookSlice = createSlice({
   initialState: {
     entities: [],
     loading: "idle",
+    loadingAccount: "idle",
     error: false,
     showModal: false,
     currentBook: null, // Şu an düzenlenen kitabı tutmak için
     isLoggedIn: false,
-    loginRegister: "idle",
     // login işlemleri
+    loginRegister: "idle",
     accounts: [],
   },
   reducers: {
+    changeEntities: (state,action) => {
+      state.entities = action.payload; // Search for entities
+    },
     changeLoginRegister: (state, action) => {
       state.loginRegister = action.payload; // idle login register
     },
@@ -273,40 +277,40 @@ export const bookSlice = createSlice({
       })
       // ACCOUNTS İŞLEMLERİ
       .addCase(getTheBook.rejected, (state) => {
-        state.loading = "failed";
+        state.loadingAccount = "failed";
         state.error = true;
       })
       .addCase(getAccounts.pending, (state) => {
-        state.loading = "pending";
+        state.loadingAccount = "pending";
         state.error = false;
       })
       .addCase(getAccounts.fulfilled, (state, action) => {
-        state.loading = "succeeded";
+        state.loadingAccount = "succeeded";
         state.error = false;
         state.accounts = action.payload;
       })
       .addCase(getAccounts.rejected, (state) => {
-        state.loading = "failed";
+        state.loadingAccount = "failed";
         state.error = true;
       })
       .addCase(postAccount.pending, (state) => {
-        state.loading = "pending";
+        state.loadingAccount = "pending";
         state.error = false;
       })
       .addCase(postAccount.fulfilled, (state, action) => {
-        state.loading = "succeeded";
+        state.loadingAccount = "succeeded";
         state.error = false;
         // account Ekle
         state.accounts.unshift(action.payload);
       })
       .addCase(postAccount.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loadingAccount = "failed";
         state.error = action.payload || action.error.message;
       })
   },
 });
 
-export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister } = bookSlice.actions;
+export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister, changeEntities } = bookSlice.actions;
 
 export default bookSlice.reducer;
 

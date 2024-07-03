@@ -15,13 +15,16 @@ const TheBook = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("bookid", { bookId }.bookId);
+    console.log("bookid the book", { bookId }.bookId);
     dispatch(getTheBook({ bookId }.bookId));
-  }, [bookId, dispatch]);
+  }, [bookId,dispatch]);
 
   const { loading, currentBook, error } = useSelector(
     (state) => state.bookSlice
   );
+  if (loading === "pending") {
+    return <div>Loading...</div>;
+  }
 
   if (loading === "succeeded") {
     return (
