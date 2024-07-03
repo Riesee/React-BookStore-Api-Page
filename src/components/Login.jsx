@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Register from "./Register";
 import { useDispatch } from "react-redux";
-import { changeLoggedIn, loginUser } from "../redux/bookSlice";
+import { changeLoggedIn, loginUser, setCurrentAccount } from "../redux/bookSlice";
 
 const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
   const [username, setUsername] = useState("")
@@ -31,6 +31,7 @@ const Login = ({ loginmi, setLoginmi, registermi, setRegistermi }) => {
         // Başarılı giriş durumunda yapılacak işlemler
         setLoginmi(false);
         dispatch(changeLoggedIn(true))
+        dispatch(setCurrentAccount(user))
       } else {
         setError("Invalid credentials");
       }

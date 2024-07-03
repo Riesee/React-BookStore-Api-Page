@@ -1,5 +1,12 @@
+import { useSelector } from "react-redux";
 
 const Filter = () => {
+
+  const { entities, loading } = useSelector((state) => state.bookSlice);
+
+  console.log(entities,"filterde entities");
+
+  
   return (
     <div className="bg-white-500 text-black p-1 px-5 flex items-center justify-between my-4">
       <div className="bg-black mr-3 text-white p-1 rounded px-5 flex items-center justify-between cursor-pointer">

@@ -6,7 +6,7 @@ import { getBooks } from "../redux/bookSlice";
 import TablePagination from "@mui/material/TablePagination";
 import EditModal from "./EditModal";
 
-const ItemList = ({ filteredEntities, setFilteredEntities }) => {
+const ItemList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(9);
 
@@ -21,16 +21,14 @@ const ItemList = ({ filteredEntities, setFilteredEntities }) => {
 
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.bookSlice.showModal);
+  const filteredEntities = useSelector((state) => state.bookSlice.filteredEntities);
   const { entities, loading } = useSelector((state) => state.bookSlice);
 
   useEffect(() => {
     if (loading === "idle") {
       dispatch(getBooks());
     }
-    if (loading === "succeeded") {
-      setFilteredEntities(entities);
-    }
-  }, [dispatch, loading, entities, setFilteredEntities]);
+  }, [dispatch, loading, entities]);
 
   if (loading === "pending") {
     return <div>Loading...</div>;

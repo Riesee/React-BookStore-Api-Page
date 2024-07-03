@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilteredEntities } from "../redux/bookSlice";
 
-const Search = ({ setFilteredEntities }) => {
+const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
+
+  const dispatch = useDispatch()
 
   const { entities, loading } = useSelector((state) => state.bookSlice);
 
   const filterItems = () => {
-    console.log(searchTerm, "fonksiyondaki searchterm");
     return entities.filter((item) => {
       return searchTerm.toLowerCase() === ""
         ? item
@@ -17,7 +19,7 @@ const Search = ({ setFilteredEntities }) => {
 
   useEffect(() => {
     const filtered = filterItems();
-    setFilteredEntities(filtered);
+    dispatch(setFilteredEntities(filtered));
   }, [entities, searchTerm]);
 
   const handleSearchChange = (e) => {

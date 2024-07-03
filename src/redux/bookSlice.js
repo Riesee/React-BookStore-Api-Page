@@ -138,9 +138,9 @@ export const postAccount = createAsyncThunk(
   }
 );
 
-const findUserByEmailAndPassword = (email, password) => {
+const findUserByEmailAndPassword = (username, password) => {
   return db.accounts.find(
-    (account) => account.email === email && account.password === password
+    (account) => account.username === username && account.password === password
   );
 };
 
@@ -169,11 +169,19 @@ export const bookSlice = createSlice({
     showModal: false,
     currentBook: null, // Şu an düzenlenen kitabı tutmak için
     isLoggedIn: false,
+    filteredEntities: [],
     // login işlemleri
     loginRegister: "idle",
     accounts: [],
+    currentAccount: [],
   },
   reducers: {
+    setFilteredEntities: (state,action) => {
+      state.filteredEntities = action.payload; 
+    },
+    setCurrentAccount: (state,action) => {
+      state.currentAccount = action.payload; 
+    },
     changeEntities: (state,action) => {
       state.entities = action.payload; // Search for entities
     },
@@ -310,7 +318,7 @@ export const bookSlice = createSlice({
   },
 });
 
-export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister, changeEntities } = bookSlice.actions;
+export const { setBooks, setLoading, setError, setModal, changeCurrentBook, changeLoggedIn, changeLoginRegister, changeEntities, setCurrentAccount, setFilteredEntities } = bookSlice.actions;
 
 export default bookSlice.reducer;
 
