@@ -36,15 +36,10 @@ const Navbar = () => {
     }));
   };
 
-  const silecem = () => {
-    dispatch(changeLoggedIn(!isLogin));
-    dispatch(getAccounts());
-  };
-
   return (
     <div className="bg-black text-white p-3">
       <div className="flex justify-between items-center">
-        <span className="text-2xl font-bold cursor-pointer" onClick={silecem}>
+        <span className="text-2xl font-bold cursor-pointer">
           BookStore
         </span>
         <div className="w-full">
